@@ -44,7 +44,7 @@ public class Main {
                     displayMovies();
                     break;
                 case 3: //ask movie?
-                    System.out.print("ezt nem tudom micsoda");
+                    System.out.print("ezt nagyon nem tudom micsoda");
                     break;
                 case 4: //Exit
                     System.exit(1);
