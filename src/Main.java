@@ -16,6 +16,7 @@ public class Main {
         System.out.println("           1.Registration");
         System.out.println("           2.Login");
         System.out.println("           3.Recommended Movies");
+        System.out.println("           4.Help");
         System.out.println("======================================================");
         System.out.println("          What Do you Want to do??");
         System.out.print("Enter Your Choice: ");
@@ -28,7 +29,10 @@ public class Main {
                 Login();
                 break;
             case 3: //Recommended Movies
-                order();
+                displayRecommendedMovies();
+                break;
+            case 4:
+                help();
                 break;
             default:
                 break;
@@ -36,13 +40,18 @@ public class Main {
 
     }
 
-    public static void AdminAddOrDelete(){
+    public static void AdminAddOrDelete() throws IOException {
         System.out.println("Delete or Add?(delete/add)");
         String isDeleteOrAdd = sc.next();
         if(isDeleteOrAdd.equals("delete")){
             //TODO
         }
         else if(isDeleteOrAdd.equals("add")){
+            BufferedReader reader = getBufferedReader("movies.txt");
+            List<Movie> listOfMovies= getMoviesToList(reader);
+            for(Movie m : listOfMovies){
+                System.out.println(m.Location + "-" + m.Theater + "-" + m.Movie + "-" + m.Day + ":" + m.Hour);
+            }
             Movie movie = new Movie();
 
             System.out.println("Id:");
@@ -86,6 +95,8 @@ public class Main {
         System.out.println("======================================================");
         System.out.println("           1.Order");
         System.out.println("           2.Check your orders");
+        System.out.println("           3.Recommended movies");
+        System.out.println("           4.Add Movie to wishlist");
         System.out.println("======================================================");
         System.out.println("          What Do you Want to do??");
         System.out.print("Enter Your Choice: ");
@@ -97,8 +108,43 @@ public class Main {
             case 2: //Check your orders
                 checkMyOrders();
                 break;
+            case 3: //Recommended movies
+                displayRecommendedMovies();
+                break;
+            case 4:
+                addMovieToWishlist();
+                break;
             default:
                 break;
+        }
+
+    }
+    public static void help(){
+        System.out.println("FullName: - Write your full name together");
+        System.out.println("Username: - Write a username what you want to use");
+        System.out.println("EmailAddress: - Write your email address");
+        System.out.println("DateOfBirth: - Write your birthdate like this: 1990/01/28");
+        System.out.println("Password: - Write your password and note it down");
+    }
+
+    public static void addMovieToWishlist() throws IOException {
+        System.out.println("Movie name: ");
+        String name = sc.next();
+        BufferedWriter writer = new BufferedWriter(new FileWriter("wishlist.txt", true));
+        StringBuffer oneLine = new StringBuffer();
+        oneLine.append(name);
+        oneLine.append(",");
+        writer.append(oneLine);
+        writer.close();
+    }
+
+    public static void displayRecommendedMovies() throws IOException {
+        BufferedReader reader = getBufferedReader("movies.txt");
+        List<Movie> MovieList = getMoviesToList(reader);
+        MovieList = MovieList.stream().filter(distinctByKey(m->m.getMovie())).collect(Collectors.toList());
+        System.out.println("****************Recommended Movies****************");
+        for(Movie m : MovieList){
+            System.out.println("- " + m.Movie);
         }
 
     }
@@ -125,9 +171,7 @@ public class Main {
 
     }
 
-
-    public static void order() throws IOException {
-        BufferedReader reader = getBufferedReader("movies.txt");
+    public static List<Movie> getMoviesToList(BufferedReader reader) throws IOException {
         String line1 = null;
         List<Movie> MovieList = new ArrayList<>();
         reader.readLine();
@@ -144,6 +188,14 @@ public class Main {
             actualMovie.Price = Integer.parseInt(csvFields[6]);
             MovieList.add(actualMovie);
         }
+        return MovieList;
+    }
+
+    public static void order() throws IOException {
+        BufferedReader reader = getBufferedReader("movies.txt");
+
+        List<Movie> MovieList = getMoviesToList(reader);
+
         //List<Movie> distinctElement = MovieList.stream().distinct().collect(Collectors.toList());
 
         List<Movie> locationList = MovieList.stream().filter(distinctByKey(m->m.getLocation())).collect(Collectors.toList());
@@ -397,13 +449,14 @@ public class Main {
         String EmailAddress = sc.next();
         user.EmailAddress = EmailAddress;
 
-        System.out.print("DateOfBirth(ex.:19940212: ");
+        System.out.print("DateOfBirth: ");
         String DateOfBirth = sc.next();
         user.DateOfBirth = DateOfBirth;
 
         user.Point = 0;
 
         writeUserToCSV(user);
+        System.out.print("Your account created successfully!");
     }
 
     public static void Login() throws IOException {
