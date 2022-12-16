@@ -4,7 +4,6 @@ Id,Location,Theater,Movie,Day,Hour,Price
 3,Budapest,Allee,FeketeParduc2,2022/12/20,21:00,2000
 4,Budapest,Allee,VerApo,2022/12/20,20:30,2000
 5,Budapest,MomPark,Avatar,2022/12/20,18:45,2000
-6,Budapest,MomPark,FeketeParduc2,2022/12/20,21:15,2000
 7,Budapest,MomPark,FeketeParduc2,2022/12/21,18:30,2000
 8,Budapest,MomPark,VerApo,2022/12/20,22:30,2000
 9,Pecs,Plaza,Avatar,2022/12/20,18:45,2000
