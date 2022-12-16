@@ -1,5 +1,6 @@
 Fullname,Username,EmailAddress,DateOfBirth,Password,Point,Role
 hgdf,wer,rwerwer,45435,4435,0,user
 gdfgr,asd,ertert,6546547,trete45r,0,user
-akarki,patrik,valaki,4324325,lol,0,user
 patrik,admin,asd@asd.asd,19991112,admin,0,admin
+nagyonvalaki,valaki,valaki@valaki.valaki,1989/12/23,valaki,0,user
+akarki,patrik,valaki,4324325,lol,100,user

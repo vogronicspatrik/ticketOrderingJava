@@ -26,7 +26,7 @@ public class Main {
                 registration();
                 break;
             case 2: //Login
-                Login();
+                ActualUser.Login(sc);
                 break;
             case 3: //Recommended Movies
                 displayRecommendedMovies();
@@ -44,7 +44,27 @@ public class Main {
         System.out.println("Delete or Add?(delete/add)");
         String isDeleteOrAdd = sc.next();
         if(isDeleteOrAdd.equals("delete")){
-            //TODO
+
+            BufferedReader reader = getBufferedReader("movies.txt");
+            List<Movie> listOfMovies= getMoviesToList(reader);
+            List<String> Ids = new ArrayList<>();
+            for(Movie m : listOfMovies){
+                System.out.println(m.Id + "-" + m.Location + "-" + m.Theater + "-" + m.Movie + "-" + m.Day + ":" + m.Hour);
+                Ids.add(m.Id);
+            }
+            System.out.print("Id: ");
+            String idForDelete;
+            while(true){
+                String id = sc.next();
+                if(Ids.contains(id)){
+                    idForDelete = id;
+                    break;
+                }
+                System.out.print("This Id is not exist, try again: ");
+            }
+            reader.close();
+            removeRecord("movies.txt",idForDelete,1);
+
         }
         else if(isDeleteOrAdd.equals("add")){
             BufferedReader reader = getBufferedReader("movies.txt");
@@ -86,6 +106,60 @@ public class Main {
         }
         else{
             System.out.println("Wrong command");
+        }
+    }
+
+
+
+    public static void savePoints(){
+        removeRecord("users.txt", ActualUser.FullName, 1);
+        writeUserToCSV(ActualUser);
+    }
+    public static void removeRecord(String filepath, String removeTerm, int positionOfTerm){
+        int position = positionOfTerm-1;
+        String tempFile = "temp.txt";
+        String currentLine;
+        String data[];
+
+        try{
+            FileWriter fw = new FileWriter(tempFile, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            FileReader fr = new FileReader(filepath);
+            BufferedReader br = new BufferedReader(fr);
+
+            while ((currentLine = br.readLine()) != null){
+                data = currentLine.split(",");
+                if(!(data[position].equalsIgnoreCase(removeTerm))){
+                    pw.println(currentLine);
+                }
+            }
+            pw.flush();
+            pw.close();
+            fr.close();
+            br.close();
+            bw.close();
+            fw.close();
+
+            File myObj = new File(filepath);
+            if (myObj.delete()) {
+                System.out.println("Deleted the file: " + myObj.getName());
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+            File file = new File("temp.txt");
+            File rename = new File(filepath);
+            boolean flag = file.renameTo(rename);
+            if (flag) {
+                System.out.println("File Successfully Rename");
+            }
+            else {
+                System.out.println("Operation Failed");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println("Nem jó");
         }
     }
 
@@ -375,7 +449,7 @@ public class Main {
             for(Log log : ListOfOrderedMoviesWaitingToBuy){
                 writeLogToCSV(log);
             }
-
+        savePoints();
         }
         else{
             System.out.println("Thank you, for your visiting, see you later! :)");
@@ -385,6 +459,7 @@ public class Main {
 
 
     }
+
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
@@ -459,53 +534,53 @@ public class Main {
         System.out.print("Your account created successfully!");
     }
 
-    public static void Login() throws IOException {
-        BufferedReader reader = getBufferedReader("users.txt");
-
-        String line1 = null;
-        List<User> UserList = new ArrayList<>();
-        reader.readLine();
-        while((line1 = reader.readLine()) != null){
-            String[] csvFields = line1.split(CSV_SEPARATOR);
-
-            User actualUser = new User();
-            actualUser.FullName = csvFields[0];
-            actualUser.Username = csvFields[1];
-            actualUser.EmailAddress = csvFields[2];
-            actualUser.DateOfBirth = csvFields[3];
-            actualUser.Password = csvFields[4];
-            actualUser.Point = Integer.parseInt(csvFields[5]);
-            actualUser.Role = csvFields[6];
-            UserList.add(actualUser);
-        }
-
-        while (ActualUser.Username == null) {
-            User user = new User();
-            System.out.print("UserName: ");
-            String username = sc.next();
-            user.Username = username;
-
-            System.out.print("Password: ");
-            String Password = sc.next();
-            user.Password = Password;
-
-            for (User u : UserList) {
-                if (u.Username.equals(user.Username) && u.Password.equals(user.Password)) {
-                    ActualUser = u;
-                    break;
-                }
-            }
-            if(ActualUser.Username != null){
-                System.out.println("Successfully logged in! :)");
-                break;
-            }
-            else{
-                System.out.println("Bad Username or Password, try again!");
-            }
-        }
-
-
-    }
+//    public static void Login() throws IOException {
+//        BufferedReader reader = getBufferedReader("users.txt");
+//
+//        String line1 = null;
+//        List<User> UserList = new ArrayList<>();
+//        reader.readLine();
+//        while((line1 = reader.readLine()) != null){
+//            String[] csvFields = line1.split(CSV_SEPARATOR);
+//
+//            User actualUser = new User();
+//            actualUser.FullName = csvFields[0];
+//            actualUser.Username = csvFields[1];
+//            actualUser.EmailAddress = csvFields[2];
+//            actualUser.DateOfBirth = csvFields[3];
+//            actualUser.Password = csvFields[4];
+//            actualUser.Point = Integer.parseInt(csvFields[5]);
+//            actualUser.Role = csvFields[6];
+//            UserList.add(actualUser);
+//        }
+//
+//        while (ActualUser.Username == null) {
+//            User user = new User();
+//            System.out.print("UserName: ");
+//            String username = sc.next();
+//            user.Username = username;
+//
+//            System.out.print("Password: ");
+//            String Password = sc.next();
+//            user.Password = Password;
+//
+//            for (User u : UserList) {
+//                if (u.Username.equals(user.Username) && u.Password.equals(user.Password)) {
+//                    ActualUser = u;
+//                    break;
+//                }
+//            }
+//            if(ActualUser.Username != null){
+//                System.out.println("Successfully logged in! :)");
+//                break;
+//            }
+//            else{
+//                System.out.println("Bad Username or Password, try again!");
+//            }
+//        }
+//
+//
+//    }
 
     private static BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
@@ -532,7 +607,12 @@ public class Main {
             oneLine.append(CSV_SEPARATOR);
             oneLine.append(user.Password);
             oneLine.append(CSV_SEPARATOR);
-            oneLine.append(0);
+            if(ActualUser.Point > 0){
+                oneLine.append(ActualUser.Point);
+            }
+            else{
+                oneLine.append(0);
+            }
             oneLine.append(CSV_SEPARATOR);
             oneLine.append("user");
             oneLine.append("\n");
@@ -641,7 +721,6 @@ public class Main {
             }
         }
     }
-
     }
 }
 

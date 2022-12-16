@@ -10,10 +10,4 @@ Id,Location,Theater,Movie,Day,Hour,Price
 9,Pecs,Plaza,Avatar,2022/12/20,18:45,2000
 10,Pecs,Plaza,Avatar,2022/12/21,20:30,2000
 11,Pecs,Plaza,Avatar,2022/12/22,19:00,2000
-12,Pecs,Plaza,FeketeParduc2,2022/12/20,21:15,2000
-13,Pecs,Plaza,VerApo,2022/12/20,22:30,2000
 14,Veszprem,BalatonPlaza,Avatar,2022/12/20,18:45,2000
-15,Veszprem,BalatonPlaza,FeketeParduc2,2022/12/20,21:15,2000
-16,Veszprem,ValamiMasMozi,VerApo,2022/12/20,22:30,2000
-17,Veszprem,CinemaVeszprem,VerApo,2022/12/21,23:00,2000
-20,Budapest,Allee,ValamiFilm,2022/12/26,22:22,2000
